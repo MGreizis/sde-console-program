@@ -28,7 +28,7 @@ class ForestAdventure implements Adventure {
                 System.out.println("You rest for a while.");
             } else if (input.equals("interact")) {
                 System.out.println("Which NPC would you like to interact with? (1, 2)");
-                int npcNum = scanner.nextInt();
+                int npcNum = Integer.parseInt(scanner.nextLine());
                 npcs[npcNum - 1].interact();
                 if (npcs[npcNum - 1] instanceof Merchant) {
                     ((Merchant) npcs[npcNum - 1]).showItems();
