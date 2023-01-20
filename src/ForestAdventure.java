@@ -28,14 +28,26 @@ class ForestAdventure implements Adventure {
                 System.out.println("You rest for a while.");
             } else if (input.equals("interact")) {
                 System.out.println("Which NPC would you like to interact with? (1, 2)");
-                int npcNum = Integer.parseInt(scanner.nextLine());
+                String npcNumStr = scanner.nextLine();
+                int npcNum;
+                try {
+                    npcNum = Integer.parseInt(npcNumStr);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    continue;
+                }
+                if (npcNum < 1 || npcNum > npcs.length) {
+                    System.out.println("Invalid input. Please enter a number between 1 and " + npcs.length);
+                    continue;
+                }
                 npcs[npcNum - 1].interact();
                 if (npcs[npcNum - 1] instanceof Merchant) {
                     ((Merchant) npcs[npcNum - 1]).showItems();
                 } else if (npcs[npcNum - 1] instanceof QuestGiver) {
                     ((QuestGiver) npcs[npcNum - 1]).giveQuest();
                 }
-            } else {
+            }
+            else {
                 System.out.println("Invalid command. Please try again.");
             }
             System.out.println("What would you like to do? (explore, rest, interact, quit)");
