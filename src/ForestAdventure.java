@@ -5,13 +5,23 @@ class ForestAdventure implements Adventure {
     private final Map map;
     private final NPC[] npcs;
 
-    public ForestAdventure(String name) {
-        this.name = name;
-        this.map = new ForestMap();
-        this.npcs = new NPC[] {
+    public ForestAdventure(Builder builder) {
+        this.name = builder.name;
+        this.map = builder.map;
+        this.npcs = builder.npcs;
+    }
+
+    public static class Builder {
+        private final String name;
+        private Map map = new ForestMap();
+        private NPC[] npcs = new NPC[] {
                 new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
                 new QuestGiver("Eldrin the Elf", "Greetings, adventurer. I have a task that I believe you are well suited for.", "Retrieve the lost artifact from the cave.")
         };
+
+        public Builder(String name) {
+            this.name = name;
+        }
     }
 
     public void start() {
@@ -44,11 +54,9 @@ class ForestAdventure implements Adventure {
                 if (npcs[npcNum - 1] instanceof Merchant) {
                     ((Merchant) npcs[npcNum - 1]).showItems();
                 } else if (npcs[npcNum - 1] instanceof QuestGiver) {
-//                    ((QuestGiver) npcs[npcNum - 1]).checkQuest();
                     ((QuestGiver) npcs[npcNum - 1]).giveQuest();
                 }
-            }
-            else {
+            } else {
                 System.out.println("Invalid command. Please try again.");
             }
             System.out.println("What would you like to do? (explore, rest, interact, quit)");
@@ -57,3 +65,4 @@ class ForestAdventure implements Adventure {
         System.out.println("Thanks for playing!");
     }
 }
+
