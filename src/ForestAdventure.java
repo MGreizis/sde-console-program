@@ -44,6 +44,7 @@ class ForestAdventure implements Adventure {
                 if (npcs[npcNum - 1] instanceof Merchant) {
                     ((Merchant) npcs[npcNum - 1]).showItems();
                 } else if (npcs[npcNum - 1] instanceof QuestGiver) {
+//                    ((QuestGiver) npcs[npcNum - 1]).checkQuest();
                     ((QuestGiver) npcs[npcNum - 1]).giveQuest();
                 }
             }

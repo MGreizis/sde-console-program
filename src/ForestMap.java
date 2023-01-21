@@ -39,6 +39,10 @@ class ForestMap implements Map {
             System.out.println("Invalid command. Please try again.");
         }
     }
+
+    public boolean isArtifactRetrieved() {
+        return artifactRetrieved;
+    }
 }
 
 
