@@ -4,16 +4,19 @@ class ForestAdventure implements Adventure {
     private final String name;
     private final Map map;
     private final NPC[] npcs;
+    private final Inventory inventory;
 
     public ForestAdventure(Builder builder) {
         this.name = builder.name;
         this.map = builder.map;
         this.npcs = builder.npcs;
+        this.inventory = builder.inventory;
     }
 
     public static class Builder {
         private final String name;
         private Map map = new ForestMap();
+        private Inventory inventory = new Inventory();
         private NPC[] npcs = new NPC[] {
                 new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
                 new QuestGiver("Eldrin the Elf", "Greetings, adventurer. I have a task that I believe you are well suited for.", "Retrieve the lost artifact from the cave.")
@@ -28,7 +31,7 @@ class ForestAdventure implements Adventure {
         System.out.println("Welcome to the " + name + " Adventure!");
         map.display();
         System.out.println("You are standing at the entrance of the forest.");
-        System.out.println("What would you like to do? (explore, rest, interact, quit)");
+        System.out.println("What would you like to do? (explore, rest, interact, inventory, quit)");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         while (!input.equals("quit")) {
@@ -56,6 +59,11 @@ class ForestAdventure implements Adventure {
                 } else if (npcs[npcNum - 1] instanceof QuestGiver) {
                     ((QuestGiver) npcs[npcNum - 1]).giveQuest();
                 }
+            } else if (input.equals("inventory")) {
+                inventory.display();
+                System.out.println("Which item would you like to use? (enter the item name)");
+                String itemName = scanner.nextLine();
+                inventory.useItem(itemName);
             } else {
                 System.out.println("Invalid command. Please try again.");
             }

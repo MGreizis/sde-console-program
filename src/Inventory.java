@@ -19,7 +19,7 @@ class Inventory {
 
     public void useItem(String name) {
         for (Item item : items) {
-            if (item.getName().equals(name)) {
+            if (item.getName().toLowerCase().equals(name.toLowerCase())) {
                 item.use();
                 return;
             }
