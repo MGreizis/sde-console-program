@@ -1,13 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Inventory {
-    private Item[] items;
+    private List<Item> items;
+    private int gold;
     public Inventory() {
-        items = new Item[] {
-                new SimpleItem("Sword"),
-                new SimpleItem("Potion"),
-                new CompositeItem("Bag")
-        };
-        items[2].add(new SimpleItem("Gold"));
-        items[2].add(new SimpleItem("Gem"));
+        this.gold = 75;
+        this.items = new ArrayList<>();
     }
 
     public void display() {
@@ -25,5 +24,29 @@ class Inventory {
             }
         }
         System.out.println("Item not found in inventory.");
+    }
+
+    public void updateGold(int amount) {
+        this.gold += amount;
+    }
+    public int getGold() {
+        return gold;
+    }
+    public void addToInventory(Item item) {
+        items.add(item);
+    }
+
+    public void getPrice(String name) {
+        for (Item item : items) {
+            if (item.getName().toLowerCase().equals(name.toLowerCase())) {
+                System.out.println("Price: " + item.getPrice());
+                return;
+            }
+        }
+        System.out.println("Item not found in inventory.");
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 }

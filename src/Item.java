@@ -4,4 +4,5 @@ public interface Item {
     void add(Item item);
     void remove(Item item);
     Item[] getItems();
+    Integer getPrice();
 }

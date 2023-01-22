@@ -29,4 +29,12 @@ class CompositeItem implements Item {
     public Item[] getItems() {
         return items.toArray(new Item[0]);
     }
+
+    public Integer getPrice() {
+        int price = 0;
+        for (Item item : items) {
+            price += item.getPrice();
+        }
+        return price;
+    }
 }

@@ -56,18 +56,26 @@ class ForestAdventure implements Adventure {
                 npcs[npcNum - 1].interact();
                 if (npcs[npcNum - 1] instanceof Merchant) {
                     ((Merchant) npcs[npcNum - 1]).showItems();
+                    System.out.println("Which item would you like to purchase? (name)");
+                    System.out.println("You have " + inventory.getGold() + " gold.");
+                    String itemName = scanner.nextLine();
+                    ((Merchant) npcs[npcNum - 1]).buyItem(itemName, inventory);
                 } else if (npcs[npcNum - 1] instanceof QuestGiver) {
                     ((QuestGiver) npcs[npcNum - 1]).giveQuest();
                 }
             } else if (input.equals("inventory")) {
-                inventory.display();
-                System.out.println("Which item would you like to use? (enter the item name)");
-                String itemName = scanner.nextLine();
-                inventory.useItem(itemName);
+                if (inventory.isEmpty()) {
+                    System.out.println("Your inventory is empty.");
+                } else {
+                    inventory.display();
+                    System.out.println("Which item would you like to use? (enter the item name)");
+                    String itemName = scanner.nextLine();
+                    inventory.useItem(itemName);
+                }
             } else {
                 System.out.println("Invalid command. Please try again.");
             }
-            System.out.println("What would you like to do? (explore, rest, interact, quit)");
+            System.out.println("What would you like to do? (explore, rest, interact, inventory, quit)");
             input = scanner.nextLine();
         }
         System.out.println("Thanks for playing!");

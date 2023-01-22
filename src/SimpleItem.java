@@ -1,7 +1,9 @@
 class SimpleItem implements Item {
     private String name;
-    public SimpleItem(String name) {
+    private Integer price;
+    public SimpleItem(String name, Integer price) {
         this.name = name;
+        this.price = price;
     }
 
     public String getName() {
@@ -22,5 +24,9 @@ class SimpleItem implements Item {
 
     public Item[] getItems() {
         throw new UnsupportedOperationException();
+    }
+
+    public Integer getPrice() {
+        return price;
     }
 }
