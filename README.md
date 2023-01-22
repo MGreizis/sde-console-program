@@ -20,7 +20,7 @@ class ForestAdventure implements Adventure {
 
     public void start() {
         //...
-        System.out.println("What would you like to do? (explore, rest, interact, quit)");
+        System.out.println("What would you like to do? (explore, rest, interact, inventory, quit)");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         while (!input.equals("quit")) {
@@ -33,6 +33,37 @@ class ForestAdventure implements Adventure {
     }
 }
 
+```
+
+## Composite (Structural)
+The Composite pattern allows to create a hierarchical tree of items where the leaf node represents an `Item` and the composite node represents a `CompositeItem` that contains other items. The game code can navigate through this tree by calling the `add`, `remove` methods on `CompositeItem` objects, and can treat `CompositeItem` objects and `Item` objects in a consistent manner using the `getName` method.
+
+```java
+class CompositeItem implements Item {
+    private List<Item> items = new ArrayList<>();
+    private String name;
+    public CompositeItem(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void use() {
+        for (Item item : items) {
+            item.use();
+        }
+    }
+
+    public void add(Item item) {
+        items.add(item);
+    }
+
+    public void remove(Item item) {
+        items.remove(item);
+    }
+}
 ```
 
 ## Strategy (Behavioral)
@@ -136,6 +167,7 @@ class ForestAdventure implements Adventure {
     public static class Builder {
         private final String name;
         private Map map = new ForestMap();
+        private Inventory inventory = new Inventory();
         private NPC[] npcs = new NPC[] {
                 new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
                 new QuestGiver("Eldrin the Elf", "Greetings, adventurer. I have a task that I believe you are well suited for.", "Retrieve the lost artifact from the cave.")
