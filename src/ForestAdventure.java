@@ -16,8 +16,8 @@ class ForestAdventure implements Adventure {
     public static class Builder {
         private final String name;
         private MapFactory mapFactory = new ForestMapFactory();
-        private Inventory inventory = new Inventory();
-        private NPC[] npcs = new NPC[] {
+        private final Inventory inventory = new Inventory();
+        private final NPC[] npcs = new NPC[] {
                 new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
                 new QuestGiver("Eldrin the Elf", "Greetings, adventurer. I have a task that I believe you are well suited for.", "Retrieve the lost artifact from the cave.")
         };

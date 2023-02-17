@@ -1,6 +1,6 @@
 public class DesertAdventure implements Adventure {
-    private String name;
-    private Map map;
+    private final String name;
+    private final Map map;
 
     public DesertAdventure(Builder builder) {
         this.name = builder.name;
@@ -13,7 +13,7 @@ public class DesertAdventure implements Adventure {
     }
 
     public static class Builder {
-        private String name;
+        private final String name;
         private MapFactory mapFactory = new DesertMapFactory();
 
         public Builder(String name) {
