@@ -8,14 +8,14 @@ class ForestAdventure implements Adventure {
 
     public ForestAdventure(Builder builder) {
         this.name = builder.name;
-        this.map = builder.map;
+        this.map = builder.mapFactory.createMap();
         this.npcs = builder.npcs;
         this.inventory = builder.inventory;
     }
 
     public static class Builder {
         private final String name;
-        private Map map = new ForestMap();
+        private MapFactory mapFactory = new ForestMapFactory();
         private Inventory inventory = new Inventory();
         private NPC[] npcs = new NPC[] {
                 new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
@@ -24,6 +24,11 @@ class ForestAdventure implements Adventure {
 
         public Builder(String name) {
             this.name = name;
+        }
+
+        public Builder setMapType(String mapType) {
+            this.mapFactory = new ForestMapFactory();
+            return this;
         }
     }
 
