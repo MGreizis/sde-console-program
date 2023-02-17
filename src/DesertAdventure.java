@@ -7,17 +7,17 @@ public class DesertAdventure implements Adventure {
         this.map = builder.mapFactory.createMap();
     }
 
-    public void start() {
-        System.out.println("You are in a desert.");
-        System.out.println("You find a cactus.");
-    }
-
     public static class Builder {
         private final String name;
-        private MapFactory mapFactory = new DesertMapFactory();
+        private final MapFactory mapFactory = new DesertMapFactory();
 
         public Builder(String name) {
             this.name = name;
         }
+    }
+
+    public void start() {
+        System.out.println("Welcome to the " + name + " Adventure!");
+        map.display();
     }
 }
