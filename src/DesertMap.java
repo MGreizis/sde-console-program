@@ -1,9 +1,13 @@
-public class DesertMap implements Map {
-    public void display() {
-        System.out.println("You are in a desert.");
+public class DesertMap extends MapTemplate {
+    protected String getLocationName() {
+        return "desert";
     }
 
-    public void explore() {
+    protected void displayLocationDescription() {
+        System.out.println("The sun is beating down on the sandy dunes.\n");
+    }
+
+    protected void exploreLocation() {
         System.out.println("You find a cactus.");
     }
 }

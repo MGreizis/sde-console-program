@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class DesertAdventure implements Adventure {
     private final String name;
     private final Map map;
@@ -19,5 +21,13 @@ public class DesertAdventure implements Adventure {
     public void start() {
         System.out.println("Welcome to the " + name + " Adventure!");
         map.display();
+
+        System.out.println("You decide to start walking. (explore)");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+
+        if (input.equals("explore")) {
+            map.explore();
+        }
     }
 }
