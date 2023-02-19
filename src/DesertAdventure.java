@@ -3,10 +3,12 @@ import java.util.Scanner;
 public class DesertAdventure implements Adventure {
     private final String name;
     private final Map map;
+    private final Player player;
 
     public DesertAdventure(Builder builder) {
         this.name = builder.name;
         this.map = builder.mapFactory.createMap();
+        this.player = new Player();
     }
 
     public static class Builder {

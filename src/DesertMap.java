@@ -1,4 +1,9 @@
 public class DesertMap extends MapTemplate {
+    private final Player player;
+
+    public DesertMap(Player player) {
+        this.player = player;
+    }
     protected String getLocationName() {
         return "desert";
     }
@@ -9,5 +14,6 @@ public class DesertMap extends MapTemplate {
 
     protected void exploreLocation() {
         System.out.println("You find a cactus.");
+        player.drinkWater();
     }
 }

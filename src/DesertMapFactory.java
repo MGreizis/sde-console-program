@@ -1,5 +1,5 @@
 public class DesertMapFactory extends MapFactory {
     public Map createMap() {
-        return new DesertMap();
+        return new DesertMap(new Player());
     }
 }
