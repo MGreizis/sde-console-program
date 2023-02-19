@@ -1,6 +1,6 @@
 # Adventure Game
 
-This is a text-based adventure game that allows players to explore a forest and complete a quest to retrieve a lost artifact from a cave. The game uses a combination of creational, structural, and behavioral design patterns to provide a simplified interface for the player to interact with the game.
+This is a text-based adventure game that allows players to explore multiple maps and complete various quests. The game uses a combination of creational, structural, and behavioral design patterns to provide a simplified interface for the player to interact with the game.
 
 # Design Patterns
 ## Facade (Structural)
@@ -35,37 +35,6 @@ class ForestAdventure implements Adventure {
 
 ```
 
-## Composite (Structural)
-The Composite pattern allows to create a hierarchical tree of items where the leaf node represents an `Item` and the composite node represents a `CompositeItem` that contains other items. The game code can navigate through this tree by calling the `add`, `remove` methods on `CompositeItem` objects, and can treat `CompositeItem` objects and `Item` objects in a consistent manner using the `getName` method.
-
-```java
-class CompositeItem implements Item {
-    private List<Item> items = new ArrayList<>();
-    private String name;
-    public CompositeItem(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void use() {
-        for (Item item : items) {
-            item.use();
-        }
-    }
-
-    public void add(Item item) {
-        items.add(item);
-    }
-
-    public void remove(Item item) {
-        items.remove(item);
-    }
-}
-```
-
 ## Strategy (Behavioral)
 The Strategy pattern is used in the `Map` interface and its implementation `ForestMap`, which allows for different types of maps to be used in the adventure game.
 
@@ -96,86 +65,107 @@ class ForestMap implements Map {
 ```
 In this example, the `Map` interface defines a contract for the behavior of the map and the `ForestMap` class implements the behavior of the map. This allows for different types of maps to be used in the game, such as a desert map or a mountain map, and the game can handle them all in the same way.
 
-## Command (Behavioral)
-The `Map` class defines the `explore` method that is used by the player to explore different locations in the game. The `ForestMap` class extends the `Map` class and implements the `explore` method, which defines the specific behavior for exploring the forest map.
-
-```java
-// Map.java
-
-abstract class Map {
-    void display();
-    void explore();
-}
-
-// ForestMap.java
-
-class ForestMap extends Map {
-    public void display() {
-        // display the map
-    }
-    public void explore() {
-        // code for exploring the forest map
-    }
-}
-
-
-```
-
 ## State (Behavioral)
-The State pattern is used in the quest implementation, the `artifactRetrieved` variable is used to keep the state of the quest completion and the behavior of the game changes depending on the state of the quest.
+The State pattern is implemented using the `PlayerState` interface and its implementations. The `Player` class has a hydration level, which is represented by a `PlayerState` object. When the player drinks water, the current hydration level is changed to a new state, and the player is updated with this new state. In the `DesertMap`, when the player explores, they find a cactus and can drink water, which updates their hydration level. This pattern allows for flexible hydration states and keeps the `Player` class separate from hydration level logic.
 
 ```java
-class ForestMap implements Map {
-    private boolean artifactRetrieved = false;
-
-    public void display() {
-        //...
-    }
-    
-    public void explore() {
-        // ...
-            if(!artifactRetrieved) {
-                // ...
-                if(input.equals("yes")) {
-                    System.out.println("You enter the cave and after a short search, you find the lost artifact.");
-                    System.out.println("You successfully retrieve the artifact.");
-                    artifactRetrieved = true;
-                // ...
-            } else {
-                System.out.println("You have already retrieved the artifact from this cave.");
-            }
-        }
-    }
-    
-    // ...
+public interface PlayerState {
+    void drinkWater(Player player);
 }
 
-```
-If the player has already retrieved the artifact from the cave, the state will change and the player will no longer be able to access the cave while exploring the `ForestMap` map.
+public class Player {
+    private PlayerState hydrationLevel;
 
-## Builder (Creational)
-The `ForestAdventure` class has a constructor that takes a Builder object as a parameter, and the `Builder` class has a public constructor that takes a string as a parameter. The `Builder` class also has default values for the map and NPCs fields, but these can be overridden by calling methods on the `Builder` object before passing it to the `ForestAdventure` constructor. This allows for a more flexible and readable way of creating `ForestAdventure` objects with different configurations.
+    public Player() {
+        this.hydrationLevel = new NormalHydrationLevel();
+    }
+
+    public void setHydrationLevel(PlayerState hydrationLevel) {
+        this.hydrationLevel = hydrationLevel;
+    }
+
+    public void drinkWater() {
+        this.hydrationLevel.drinkWater(this);
+        System.out.println("Player is now " + this.hydrationLevel);
+    }
+}
+
+public class DesertMap extends MapTemplate {
+    // ...
+    
+    protected void exploreLocation() {
+        System.out.println("You find a cactus.");
+        player.drinkWater();
+    }
+}
+```
+
+## Template Method (Behavioral)
+The `MapTemplate` class is an abstract class that implements the `Map` interface, and provides a skeleton for the behavior of the `display` and `explore` methods. These two methods are now calling two abstract methods, `getLocationName()` and `displayLocationDescription()` for display, and `exploreLocation()` for explore.
 
 ```java
-class ForestAdventure implements Adventure {
-    // ...
+public abstract class MapTemplate implements Map {
+    public void display() {
+        System.out.println("You are in a" + getLocationName() + ".");
+        displayLocationDescription();
+    }
 
-    public ForestAdventure(Builder builder) {
-        // ...
+    public void explore() {
+        System.out.println("You start to explore the " + getLocationName() + ".");
+        exploreLocation();
+    }
+
+    // Abstract methods to be implemented by concrete subclasses
+    protected abstract String getLocationName();
+    protected abstract void displayLocationDescription();
+    protected abstract void exploreLocation();
+}
+
+// Actual implementation:
+
+public class DesertMap extends MapTemplate {
+    private final Player player;
+
+    public DesertMap(Player player) {
+        this.player = player;
+    }
+    protected String getLocationName() {
+        return "desert";
+    }
+
+    protected void displayLocationDescription() {
+        System.out.println("The sun is beating down on the sandy dunes.\n");
+    }
+
+    protected void exploreLocation() {
+        System.out.println("You find a cactus.");
+        player.drinkWater();
+    }
+}
+```
+
+## Factory (Creational)
+The Factory pattern is implemented using the `MapFactory` abstract class and its subclass, `DesertMapFactory`. The `MapFactory` has a `createMap()` method, which is implemented by the `DesertMapFactory` to create a "product", a `DesertMap` in this case. By creating different factory subclasses, we can create various types of maps, without modifying the existing client code.
+```java
+public abstract class MapFactory {
+    public abstract Map createMap();
+}
+
+public class DesertMapFactory extends MapFactory {
+    public Map createMap() {
+        return new DesertMap(new Player());
+    }
+}
+
+public class DesertAdventure implements Adventure {
+    private final Map map;
+
+    public DesertAdventure(Builder builder) {
+        this.map = builder.mapFactory.createMap();
     }
     
     public static class Builder {
-        private final String name;
-        private Map map = new ForestMap();
-        private Inventory inventory = new Inventory();
-        private NPC[] npcs = new NPC[] {
-                new Merchant("Grendor the Goblin", "Welcome traveler! I've got some fine weapons and potions for sale."),
-                new QuestGiver("Eldrin the Elf", "Greetings, adventurer. I have a task that I believe you are well suited for.", "Retrieve the lost artifact from the cave.")
-        };
-
-        public Builder(String name) {
-            this.name = name;
-        }
+        private final MapFactory mapFactory = new DesertMapFactory();
     }
     
     // ...
